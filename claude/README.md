@@ -17,6 +17,7 @@ This directory contains Claude-specific configuration and resources for AI workf
   - [Hook Handler Types](#hook-handler-types)
   - [Exit Codes](#exit-codes)
 - [Structure](#structure)
+- [Agents](#agents)
 
 ## CLAUDE.md
 
@@ -168,3 +169,9 @@ Hooks execute custom commands at specific lifecycle events. Available hook event
   - `commands/` - Custom command definitions
   - `agents/` - Agent configurations
   - `settings.json` - Claude settings
+
+## Agents
+
+Agents are Claude Code sessions configured with specific roles, instructions, and scope. They turn Claude from a reactive assistant into an autonomous specialist that can explore codebases, review pull requests, architect features, run security audits, and ship code with minimal supervision.
+
+See [Agents README](.claude/agents/README.md) for detailed documentation on agent anatomy, categories, subagent orchestration, and advanced patterns.
