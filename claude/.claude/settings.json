@@ -1,1 +1,32 @@
-{}
+{
+  "enabledMcpjsonServers": [
+    "laravel-boost",
+    "context7",
+    "figma",
+    "github"
+  ],
+  "permissions": {
+    "deny": [
+      "Read(./.env)"
+    ]
+  },
+  "model": "opusplan",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "docker compose exec app composer run pint:fix",
+            "statusMessage": "PHP code styles fixing..."
+          },
+          {
+            "type": "command",
+            "command": "docker compose exec app composer run rector:fix",
+            "statusMessage": "Applying code modernization..."
+          }
+        ]
+      }
+    ]
+  }
+}
