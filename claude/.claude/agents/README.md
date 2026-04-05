@@ -13,6 +13,83 @@ An agent is a specialized AI assistant with:
 
 Agents are configuration, not code. You don't need to build a framework — you configure Claude Code to behave like the specialist you need.
 
+## How to Create an Agent
+
+### File Location
+
+Create a `.md` file in `.claude/agents/` with a short, lowercase name (e.g., `ba.md`, `code-reviewer.md`).
+
+### Required Frontmatter Metadata
+
+Every agent file must start with YAML frontmatter containing:
+
+```yaml
+---
+name: agent-name
+description: "Detailed description of what this agent does, when to use it, trigger words, and usage examples. This is the most important field — it determines when Claude auto-delegates to this agent."
+model: sonnet | opus | haiku
+color: blue | green | red | yellow | purple | orange | gray
+---
+```
+
+| Field | Required | Purpose |
+|-------|----------|---------|
+| `name` | Yes | Unique identifier. Used when invoking the agent directly (`Use the <name> agent to...`). |
+| `description` | Yes | Tells Claude when to use this agent. Include trigger words, use cases, and examples. The more specific, the better the auto-delegation. |
+| `model` | No | Override the default model for this agent. Use `opus` for deep analysis, `sonnet` for general tasks, `haiku` for quick/simple ones. |
+| `color` | No | Visual indicator in the UI. Helps distinguish agents in multi-agent workflows. |
+
+### Agent Body
+
+After the frontmatter, write the agent's instructions in markdown. Include:
+
+1. **Role definition** — Who the agent is and what expertise it has
+2. **Methodology** — Step-by-step process to follow
+3. **Deliverable format** — Structured output template
+4. **Scope boundaries** — What the agent should and should not do
+5. **Skills and MCP references** — Which skills/tools to activate
+
+### Example
+
+```markdown
+---
+name: code-reviewer
+description: "Expert code reviewer for catching bugs, logic errors, and security issues. Use for PR reviews, code quality checks, and security audits. Trigger words: review code, check PR, security review, code quality."
+model: sonnet
+color: green
+---
+
+You are a senior engineer performing thorough code review...
+
+## Review Process
+1. Understand the context
+2. Map the changes
+3. Deep review each file
+4. Synthesize findings
+
+## Output Format
+...
+```
+
+## Agents vs Skills
+
+| Aspect | Agents | Skills |
+|--------|--------|--------|
+| **Purpose** | Autonomous specialists that own a complete task | Domain expertise activated on-demand during any task |
+| **Invocation** | Delegated to as a subagent or invoked by name | Auto-triggered by context keywords |
+| **Scope** | End-to-end: discovery, analysis, output | Focused: teaches Claude how to do one thing well |
+| **Output** | Produces a complete deliverable (plan, review, analysis) | Enhances how Claude writes/reviews code within a broader task |
+| **File** | `.claude/agents/<name>.md` with frontmatter | `.claude/skills/<name>/SKILL.md` with frontmatter |
+| **Model override** | Can specify its own model (`opus`, `sonnet`) | Uses the session's current model |
+| **Analogy** | A specialist you hand off work to | A reference manual Claude consults while working |
+
+### When to Use Which
+
+- **Use an agent** when you want Claude to delegate an entire task to a specialist (e.g., "analyze this feature" → BA agent owns the full analysis)
+- **Use a skill** when you want Claude to apply specific knowledge while doing general work (e.g., writing code with the `typescript-conventions` skill ensures correct patterns without handing off the whole task)
+
+Skills are often referenced *by* agents. For example, the BA agent references `brainstorming` and `plan-writing` skills during its analysis.
+
 ## Agent Anatomy
 
 ### 1. Identity and Expertise
