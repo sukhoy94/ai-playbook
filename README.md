@@ -4,3 +4,8 @@ A collection of AI workflow notes, configurations, and best practices for workin
 
 - [Claude](claude/README.md)
 - [Qwen](qwen/README.md)
+
+## Tools
+
+- [OpenCode](https://opencode.ai) — Open-source AI coding assistant CLI
+- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code/overview) — Anthropic's AI coding agent CLI
