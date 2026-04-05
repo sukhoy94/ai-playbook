@@ -87,7 +87,20 @@ The `.claude/settings.json` file configures Claude's behavior:
 - **enabledMcpjsonServers** - List of enabled MCP servers (laravel-boost, context7, figma, github)
 - **permissions** - Access control rules (e.g., denying read access to `.env`)
 - **model** - Default model to use
+- **env** - Environment variables controlling runtime behavior
 - **hooks** - Commands to run on specific events (e.g., running Laravel Pint and Rector on stop)
+
+### Environment Variables
+
+The `env` object sets session-wide environment variables:
+
+| Variable | Value | Purpose |
+|----------|-------|---------|
+| `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` | `40` | Triggers context compaction when the context window reaches 40% (default is higher). Keeps sessions lean and reduces token waste. |
+| `CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING` | `1` | Disables dynamic reasoning depth. Forces consistent, deterministic behavior instead of varying thinking effort based on task complexity. |
+| `MAX_THINKING_TOKENS` | `10000` | Sets the maximum tokens for internal reasoning (chain of thought). Higher values allow deeper analysis but consume more tokens. |
+| `CLAUDE_CODE_EFFORT_LEVEL` | `medium` | Balances speed vs quality. Values: `low` (fast), `medium` (balanced), `high` (thorough). |
+| `CLAUDE_CODE_DISABLE_1M_CONTEXT` | `1` | Disables the 1M token context window. Uses a smaller context window for better performance and fewer hallucinations. |
 
 ## Permissions
 

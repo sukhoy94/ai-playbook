@@ -11,6 +11,13 @@
     ]
   },
   "model": "opusplan",
+  "env": {
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "40",
+    "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
+    "MAX_THINKING_TOKENS": "10000",
+    "CLAUDE_CODE_EFFORT_LEVEL": "medium",
+    "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1"
+  },
   "hooks": {
     "Stop": [
       {
