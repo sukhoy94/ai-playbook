@@ -1,5 +1,5 @@
 # ai-workflow-playbook
 
-A collection of AI workflow notes, configurations, and best practices for using Claude Code effectively. Contains reusable configurations for agents, plugins, hooks, permissions, and project-specific instructions that can be copied across projects.
+A collection of AI workflow notes, configurations, and best practices for working with LLM-powered development tools. Contains reusable configurations, agent setups, prompt patterns, and project-specific instructions that can be adapted across different AI assistants and projects.
 
 - [Claude](claude/README.md)
