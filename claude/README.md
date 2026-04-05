@@ -11,6 +11,12 @@ This directory contains Claude-specific configuration and resources for AI workf
   - [File Locations](#file-locations)
   - [Advanced Features](#advanced-features)
   - [Best Practices](#best-practices)
+- [Rules](#rules)
+  - [What Is the Rules Directory](#what-is-the-rules-directory)
+  - [Path-Specific Rules](#path-specific-rules)
+  - [Context Priority](#context-priority)
+  - [Rules vs CLAUDE.md vs Skills](#rules-vs-claudemd-vs-skills)
+  - [Best Practices](#rules-best-practices)
 - [Settings](#settings)
 - [Permissions](#permissions)
 - [Hooks](#hooks)
@@ -79,6 +85,98 @@ The filename is case-sensitive: must be exactly `CLAUDE.md`.
 - Add instructions organically as you work (tell Claude to update `CLAUDE.md` when it makes wrong assumptions)
 - Periodically review and clean up outdated or redundant rules
 - Use emphasis (IMPORTANT, NEVER) sparingly for truly critical rules
+
+## Rules
+
+### What Is the Rules Directory
+
+The `.claude/rules/` directory is a modular alternative to monolithic CLAUDE.md files. Instead of cramming everything into one file, you organize instructions into multiple markdown files.
+
+**Important:** All rules files are loaded into the context window alongside CLAUDE.md. They receive the **same high priority** as CLAUDE.md, meaning Claude treats them as authoritative instructions.
+
+Every `.md` file in `.claude/rules/` loads automatically — no configuration needed:
+
+```
+.claude/rules/
+├── code-style.md      # Formatting and conventions
+├── testing.md         # Test requirements
+├── security.md        # Security checklist
+└── frontend/
+    ├── react.md       # React-specific patterns
+    └── styles.md      # CSS conventions
+```
+
+Subdirectories are discovered recursively. Use them to keep related rules grouped.
+
+### Path-Specific Rules
+
+You can target rules to specific file patterns using YAML frontmatter:
+
+```yaml
+---
+paths: src/api/**/*.ts
+---
+
+# API Development Rules
+
+- All endpoints must validate input with Zod
+- Return consistent error shapes: { error: string, code: number }
+```
+
+This rule **only activates when Claude works on files matching the pattern**. Your API guidelines stay out of the way when editing other files.
+
+**Multiple path patterns:**
+
+```yaml
+---
+paths:
+  - src/components/**/*.tsx
+  - src/hooks/**/*.ts
+---
+```
+
+**Brace expansion** is supported:
+
+```yaml
+---
+paths: "src/**/*.{ts,tsx}"
+---
+```
+
+### Context Priority
+
+Claude's context window has a priority hierarchy — not all tokens are weighted equally:
+
+| Source | Priority | Loads When |
+|--------|----------|------------|
+| **CLAUDE.md** | High | Every session |
+| **Rules Directory** | High | Every session (filtered by path) |
+| **Skills** | Medium | On-demand when triggered |
+| **Conversation history** | Variable | Throughout session |
+| **File contents (Read tool)** | Standard | When read |
+
+**High priority everywhere = priority nowhere.** When everything is marked important, Claude struggles to determine what's relevant. Path-targeted rules solve this by scoping high-priority instructions to specific file types.
+
+### Rules vs CLAUDE.md vs Skills
+
+| Feature | Priority | Best For | Loads When |
+|---------|----------|----------|------------|
+| **CLAUDE.md** | High | Universal operational workflows | Every session |
+| **Rules** | High | Domain-specific instructions | Every session (filtered by path) |
+| **Skills** | Medium | Reusable cross-project expertise | On-demand when triggered |
+
+- **Use CLAUDE.md** for what applies everywhere: routing logic, quality standards, coordination protocols
+- **Use rules** for what applies to specific areas: API patterns for API files, test requirements for test files
+- **Use skills** for what applies across projects: deployment procedures, code review checklists, brand guidelines
+
+### Best Practices
+
+- **Keep rules focused** — One concern per file
+- **Use descriptive filenames** — `api-validation.md` beats `rules1.md`
+- **Leverage path targeting** — Rules without paths load everywhere; add paths to reduce noise
+- **Version control everything** — Rules are code; review changes, track history
+- **User-level rules** — Place personal defaults in `~/.claude/rules/` that apply across all projects
+- **Symlinks** — Share rules across projects by symlinking from a central repository
 
 ## Settings
 
