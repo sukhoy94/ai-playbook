@@ -18,6 +18,7 @@ This directory contains Claude-specific configuration and resources for AI workf
   - [Exit Codes](#exit-codes)
 - [Structure](#structure)
 - [Agents](#agents)
+- [Plugins](#plugins)
 
 ## CLAUDE.md
 
@@ -175,3 +176,96 @@ Hooks execute custom commands at specific lifecycle events. Available hook event
 Agents are Claude Code sessions configured with specific roles, instructions, and scope. They turn Claude from a reactive assistant into an autonomous specialist that can explore codebases, review pull requests, architect features, run security audits, and ship code with minimal supervision.
 
 See [Agents README](.claude/agents/README.md) for detailed documentation on agent anatomy, categories, subagent orchestration, and advanced patterns.
+
+## Plugins
+
+Plugins are shareable packages that extend Claude Code with new capabilities. A single plugin can bundle slash commands, subagents, MCP servers, hooks, and LSP servers into one installable unit.
+
+### Why Plugins
+
+Before plugins, extending Claude Code meant manually configuring MCP servers, writing Skills, and copying hook configurations between projects. Plugins solve the distribution problem: install once, get everything, and share with your team.
+
+- **Standalone (`.claude/` directory):** Best for personal workflows and project-specific customizations
+- **Plugins:** Best for sharing with teams, distributing to the community, and reusable configurations across projects
+
+### Plugin Architecture
+
+A plugin is a directory with a manifest and optional component directories:
+
+```
+my-plugin/
+├── .claude-plugin/
+│   └── plugin.json          # Required: metadata
+├── commands/                 # Slash commands: /my-plugin:command
+├── skills/                   # Auto-invoked agent skills
+├── agents/                   # Purpose-built subagents
+├── hooks/
+│   └── hooks.json            # Event handlers
+└── .mcp.json                 # MCP server configs
+```
+
+### Installation
+
+```bash
+# Browse and install plugins
+/plugin
+
+# Add a community marketplace
+/plugin marketplace add ComposioHQ/awesome-claude-plugins
+
+# Install a specific plugin
+/plugin install context7@claude-plugins-official
+
+# Test a local plugin during development
+claude --plugin-dir ./my-plugin
+```
+
+### Popular Plugins
+
+| Plugin | Installs | Purpose |
+|--------|----------|---------|
+| Context7 | 71K+ | Up-to-date API documentation injection |
+| Code Review | 50K+ | Multi-agent code review with confidence scoring |
+| Playwright | 28K+ | Browser automation and UI testing |
+| Security Guidance | 25K+ | Vulnerability scanning on file edits |
+| Figma MCP | 18K+ | Direct Figma design file access |
+
+### Must-Have Plugins
+
+These plugins are essential for our workflow:
+
+- **Context7** — Injects real, up-to-date library documentation into Claude's context. Prevents API hallucinations and ensures code uses current syntax.
+- **Simplify** — Reduces verbosity in Claude's responses, making output more concise and actionable.
+- **Superpowers** — Collection of advanced skills including brainstorming, plan-writing, and other specialized capabilities that agents can reference.
+
+### Must-Have PHP/Laravel Plugins
+
+- **Laravel Boost** — Official MCP server giving Claude access to your application internals: database schema, routes, artisan commands, and 17,000+ pieces of version-specific Laravel documentation. Install: `composer require laravel/boost --dev && php artisan boost:install`
+- **laravel-simplifier** — Official Laravel plugin by Taylor Otwell for behavior-preserving code cleanup. Understands Laravel conventions, PHP idioms, and framework-specific patterns. Install: `/plugin marketplace add laravel/claude-code && /plugin install laravel-simplifier@laravel`
+- **superpowers-laravel** — Full Laravel plugin with slash commands for brainstorming, planning, TDD, and auto-activating skills for Pest/PHPUnit, queues, Horizon, Pint, PHPStan. Install: `/plugin marketplace add jpcaparas/superpowers-laravel && /plugin install superpowers-laravel@superpowers-laravel-marketplace`
+
+### MCP Tool Search
+
+MCP Tool Search lazy-loads MCP server tools on demand instead of loading all tool definitions at session start. This reduces context usage by up to 95%, letting you install 10+ MCP servers without degrading performance.
+
+### Security Considerations
+
+Every plugin gets access to your codebase, terminal, and potentially environment variables. There is no sandboxing between plugins.
+
+- Prefer official marketplace plugins (vetted by Anthropic)
+- Read the source before installing community plugins
+- Check install counts for community validation
+- Review `hooks.json` carefully for shell commands
+- Never install plugins with compiled binaries or obfuscated code
+
+### Plugins vs Skills vs MCP vs Hooks
+
+| Mechanism | Best For | Distribution |
+|-----------|----------|-------------|
+| **Plugins** | Bundling multiple components for sharing | Marketplace (`/plugin install`) |
+| **Skills** | Teaching domain expertise (auto-invoked) | `SKILL.md` in `.claude/skills/` |
+| **MCP Servers** | Connecting to external APIs and tools | `.mcp.json` or inside a plugin |
+| **Hooks** | Automating actions on events | `hooks.json` or inside a plugin |
+| **Slash Commands** | Quick prompt shortcuts | `commands/` directory or inside a plugin |
+
+**Rule of thumb:** Start with standalone `.claude/` configuration for personal use. When something proves useful and you want to share it, convert it to a plugin.
