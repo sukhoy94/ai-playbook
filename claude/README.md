@@ -348,6 +348,7 @@ These plugins are essential for our workflow:
 - **Context7** — Injects real, up-to-date library documentation into Claude's context. Prevents API hallucinations and ensures code uses current syntax.
 - **Simplify** — Reduces verbosity in Claude's responses, making output more concise and actionable.
 - **Superpowers** — Collection of advanced skills including brainstorming, plan-writing, and other specialized capabilities that agents can reference.
+- **Claude HUD** — Real-time statusline showing context usage, active tools, running agents, and todo progress directly in the terminal. 16.9K+ stars. Install: `/plugin marketplace add jarrodwatts/claude-hud && /plugin install claude-hud`, then `/claude-hud:setup`
 
 ### Must-Have PHP/Laravel Plugins
 
