@@ -1,0 +1,204 @@
+# Qwen Code Configuration
+
+This directory contains Qwen Code-specific configuration and resources for AI workflows.
+
+## Table of Contents
+
+- [QWEN.md](#qwenmd)
+  - [Why You Need It](#why-you-need-it)
+  - [What to Include](#what-to-include)
+  - [File Locations](#file-locations)
+  - [Best Practices](#best-practices)
+- [Settings](#settings)
+  - [Configuration Layers](#configuration-layers)
+  - [Key Settings](#key-settings)
+  - [Approval Modes](#approval-modes)
+  - [Environment Variables](#environment-variables)
+- [Tools & Permissions](#tools--permissions)
+- [Subagents](#subagents)
+- [Skills](#skills)
+- [MCP Servers](#mcp-servers)
+- [Structure](#structure)
+- [Agents](#agents)
+
+## QWEN.md
+
+`QWEN.md` is a markdown file that Qwen Code automatically reads at the start of every session. It holds project-specific instructions, conventions, and workflows that you would otherwise need to repeat in every prompt.
+
+**Important:** The entire contents of `QWEN.md` are loaded into the context window for every conversation. A large file consumes valuable context tokens, leaving less room for actual work. Keep it concise.
+
+### Why You Need It
+
+Qwen Code starts every session with no memory of previous conversations. Without `QWEN.md`, you end up repeating yourself or the model makes assumptions that don't match your project's conventions.
+
+### What to Include
+
+- **Project context** - One-liner describing the project and tech stack
+- **Code style** - Formatting rules, naming conventions, patterns
+- **Commands** - How to run tests, build, lint, deploy
+- **Gotchas** - Project-specific warnings, known workarounds, files to never modify
+- **Architecture** - Directory structure and core modules
+
+### File Locations
+
+| Location | Scope | Shareable |
+|----------|-------|-----------|
+| `QWEN.md` (project root) | Project-wide | Yes (commit to Git) |
+| `.qwen/QWEN.md` | Project-wide | Yes (commit to Git) |
+| `~/.qwen/QWEN.md` | User-level (all projects) | No (personal only) |
+
+Custom context file names can be set via `context.fileName` in `settings.json`.
+
+### Best Practices
+
+- Keep it under 300 lines; every line should earn its place
+- Use clear headings and bullet points for scannability
+- Add instructions organically as you work
+- Periodically review and clean up outdated or redundant rules
+- Use emphasis (IMPORTANT, NEVER) sparingly for truly critical rules
+
+## Settings
+
+Qwen Code uses `.qwen/settings.json` for persistent configuration with a nested, categorized structure.
+
+### Configuration Layers
+
+Configuration is applied in order of precedence (lower numbers are overridden by higher):
+
+1. Default values (hardcoded)
+2. System defaults file
+3. User settings file (`~/.qwen/settings.json`)
+4. Project settings file (`.qwen/settings.json`)
+5. System settings file
+6. Environment variables
+7. Command-line arguments
+
+### Key Settings
+
+| Setting | Type | Description |
+|---------|------|-------------|
+| `model.name` | string | Model to use (e.g., `qwen3-coder-plus`, `qwen3-coder`) |
+| `model.maxSessionTurns` | number | Max turns to keep (-1 = unlimited) |
+| `model.generationConfig` | object | Advanced overrides: `temperature`, `max_tokens`, `contextWindowSize`, `enable_thinking` |
+| `tools.approvalMode` | string | `plan`, `default`, `auto-edit`, `yolo` |
+| `tools.allowed` | array | Tools that bypass confirmation dialog |
+| `tools.exclude` | array | Tools to exclude from discovery |
+| `tools.sandbox` | boolean/string | Sandbox execution environment |
+| `context.fileName` | string/array | Custom context file name(s) |
+| `mcpServers` | object | MCP server configurations |
+| `general.vimMode` | boolean | Enable Vim keybindings |
+| `general.gitCoAuthor` | boolean | Auto-add Co-authored-by to commits |
+
+### Approval Modes
+
+| Mode | Behavior |
+|------|----------|
+| `plan` | Analyze only — no file edits or shell commands |
+| `default` | Require approval before edits or commands |
+| `auto-edit` | Auto-approve file edits, prompt for shell commands |
+| `yolo` | Auto-approve everything |
+
+### Environment Variables
+
+Key environment variables that control Qwen Code behavior:
+
+| Variable | Purpose |
+|----------|---------|
+| `QWEN_SANDBOX` | Enable sandbox mode (`true`, `false`, `docker`, `podman`) |
+| `DEBUG` / `DEBUG_MODE` | Enable verbose debug logging (auto-excluded from project `.env`) |
+| `NO_COLOR` | Disable all color output |
+| `CLI_TITLE` | Customize CLI title |
+| `TAVILY_API_KEY` | Enable web search tool |
+
+## Tools & Permissions
+
+Qwen Code uses `tools.allowed` and `tools.exclude` in `settings.json` for permission control:
+
+```json
+{
+  "tools": {
+    "allowed": [
+      "run_shell_command(git status)",
+      "run_shell_command(npm test)",
+      "edit",
+      "write_file"
+    ],
+    "exclude": [
+      "run_shell_command(rm -rf *)"
+    ]
+  }
+}
+```
+
+- **tools.allowed** — Tools that bypass the confirmation dialog
+- **tools.exclude** — Tools to exclude from discovery
+- **tools.core** — Allowlist to restrict built-in tools to a specific set
+
+Command-specific restrictions use simple string matching and are **not a security mechanism**. Use sandboxing for untrusted code execution.
+
+## Subagents
+
+Qwen Code supports a subagent system that allows the main agent to delegate tasks to specialized child agents. Subagents share the main agent's file system and workspace context but have isolated conversation histories.
+
+Subagents are configured internally and can be invoked via the `/task` command or by the model's own delegation logic. Common subagent patterns:
+
+- **Research** — Offload codebase exploration to a subagent
+- **Parallel analysis** — Multiple subagents analyze different parts simultaneously
+- **Specialized tasks** — Testing, documentation, or review handled by dedicated subagents
+
+## Skills
+
+Skills are reusable, documented capabilities stored as markdown files in `.qwen/skills/`. Each skill is a directory containing a `SKILL.md` file.
+
+```
+.qwen/skills/
+├── tdd-workflow/
+│   └── SKILL.md
+├── code-review/
+│   └── SKILL.md
+└── deployment/
+    └── SKILL.md
+```
+
+Skills are loaded dynamically and can be invoked by the model when the context matches the skill's description. The skills system is experimental and may require `--experimental-skills` flag.
+
+## MCP Servers
+
+MCP servers are configured directly in `settings.json` under `mcpServers`:
+
+```json
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/context7-mcp"]
+    },
+    "github": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "-e", "GITHUB_PERSONAL_ACCESS_TOKEN", "ghcr.io/github/github-mcp-server"]
+    }
+  }
+}
+```
+
+Each MCP server supports:
+- **command** — Command to start the server via stdio
+- **url** — SSE endpoint URL
+- **httpUrl** — Streamable HTTP endpoint
+- **env** — Environment variables for the server process
+- **trust** — Bypass all tool call confirmations for this server
+- **includeTools** / **excludeTools** — Fine-grained tool control per server
+
+## Structure
+
+- `.qwen/` - Qwen Code configuration directory
+  - `skills/` - Reusable skill definitions (SKILL.md per directory)
+  - `rules/` - Custom rules and guidelines
+  - `agents/` - Agent configurations
+  - `settings.json` - Qwen Code settings
+
+## Agents
+
+Agents are specialized AI assistants configured for specific roles. They define who the model is, what it has access to, how it should approach problems, and when to escalate vs. act autonomously.
+
+See [Agents README](.qwen/agents/README.md) for detailed documentation on agent anatomy, categories, and usage.

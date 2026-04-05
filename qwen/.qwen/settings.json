@@ -1,0 +1,27 @@
+{
+  "model": {
+    "name": "qwen3-coder-plus",
+    "maxSessionTurns": -1,
+    "generationConfig": {
+      "contextWindowSize": 128000,
+      "enableCacheControl": true
+    }
+  },
+  "tools": {
+    "approvalMode": "default",
+    "useRipgrep": true
+  },
+  "context": {
+    "fileName": ["QWEN.md"],
+    "fileFiltering": {
+      "respectGitIgnore": true,
+      "respectQwenIgnore": true,
+      "enableRecursiveFileSearch": true
+    }
+  },
+  "general": {
+    "enableAutoUpdate": true,
+    "gitCoAuthor": true
+  },
+  "mcpServers": {}
+}
