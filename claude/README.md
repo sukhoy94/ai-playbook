@@ -2,6 +2,82 @@
 
 This directory contains Claude-specific configuration and resources for AI workflows.
 
+## Table of Contents
+
+- [CLAUDE.md](#claudemd)
+  - [Why You Need It](#why-you-need-it)
+  - [What to Include](#what-to-include)
+  - [Auto-Generate with /init](#auto-generate-with-init)
+  - [File Locations](#file-locations)
+  - [Advanced Features](#advanced-features)
+  - [Best Practices](#best-practices)
+- [Settings](#settings)
+- [Permissions](#permissions)
+- [Hooks](#hooks)
+  - [Hook Handler Types](#hook-handler-types)
+  - [Exit Codes](#exit-codes)
+- [Structure](#structure)
+
+## CLAUDE.md
+
+`CLAUDE.md` is a markdown file that Claude automatically reads at the start of every session. It holds project-specific instructions, conventions, and workflows that you would otherwise need to repeat in every prompt.
+
+**Important:** The entire contents of `CLAUDE.md` are loaded into the context window for every conversation. A large file consumes valuable context tokens, leaving less room for actual work. Keep it concise and move detailed documentation to separate files referenced via `@imports`.
+
+### Why You Need It
+
+Claude starts every session with no memory of previous conversations. Without `CLAUDE.md`, you end up repeating yourself or Claude makes assumptions that don't match your project's conventions.
+
+### What to Include
+
+- **Project context** - One-liner describing the project and tech stack
+- **Code style** - Formatting rules, naming conventions, patterns
+- **Commands** - How to run tests, build, lint, deploy
+- **Gotchas** - Project-specific warnings, known workarounds, files to never modify
+- **Architecture** - Directory structure and core modules
+
+### Auto-Generate with `/init`
+
+The fastest way to create a `CLAUDE.md` is using the `/init` command in Claude Code's interactive mode:
+
+1. Navigate to your project directory
+2. Start Claude Code
+3. Type `/init`
+
+Claude will automatically:
+- Scan the project structure and detect the project type
+- Analyze config files (`package.json`, `tsconfig.json`, `pyproject.toml`, etc.)
+- Identify source directories, core modules, and entry points
+- Detect coding standards from ESLint, Prettier, and other configs
+- Generate a structured `CLAUDE.md` for your review
+
+If a `CLAUDE.md` already exists, `/init` will update it rather than overwrite.
+
+### File Locations
+
+| Location | Scope | Shareable |
+|----------|-------|-----------|
+| `CLAUDE.md` (project root) | Project-wide | Yes (commit to Git) |
+| `.claude/CLAUDE.md` | Project-wide | Yes (commit to Git) |
+| `~/.claude/CLAUDE.md` | User-level (all projects) | No (personal only) |
+| `CLAUDE.local.md` | Project-specific personal | No (add to `.gitignore`) |
+
+The filename is case-sensitive: must be exactly `CLAUDE.md`.
+
+### Advanced Features
+
+- **`@imports` system** - Reference other files with `@path/to/file` syntax to keep the main file lean
+- **`.claude/rules/` directory** - Split instructions into focused rule files (code-style.md, testing.md, security.md) that load automatically
+- **Subdirectory `CLAUDE.md` files** - Place in subdirectories for module-specific conventions; loaded only when Claude works in that area
+
+### Best Practices
+
+- Keep it under 300 lines; every line should earn its place
+- Use clear headings and bullet points for scannability
+- Add instructions organically as you work (tell Claude to update `CLAUDE.md` when it makes wrong assumptions)
+- Periodically review and clean up outdated or redundant rules
+- Use emphasis (IMPORTANT, NEVER) sparingly for truly critical rules
+
 ## Settings
 
 The `.claude/settings.json` file configures Claude's behavior:
