@@ -148,7 +148,9 @@ Subagents are configured internally and can be invoked via the `/task` command o
 
 ## Skills
 
-Skills are reusable, documented capabilities stored as markdown files in `.qwen/skills/`. Each skill is a directory containing a `SKILL.md` file.
+### What Are Skills
+
+Skills are reusable, documented capabilities stored in `.qwen/skills/`. Each skill is a directory containing a `SKILL.md` file that teaches Qwen how to perform a specific task or follow a particular methodology.
 
 ```
 .qwen/skills/
@@ -161,6 +163,53 @@ Skills are reusable, documented capabilities stored as markdown files in `.qwen/
 ```
 
 Skills are loaded dynamically and can be invoked by the model when the context matches the skill's description. The skills system is experimental and may require `--experimental-skills` flag.
+
+### Skills vs Rules
+
+| Aspect | Skills | Rules |
+|--------|--------|-------|
+| **Loading** | On-demand when triggered | Always loaded into context |
+| **Purpose** | Teach "how to do" something | Define "what must/must not" be done |
+| **Context cost** | Only when active | Every session |
+| **Granularity** | Procedural knowledge (step-by-step) | Declarative constraints (always true) |
+| **Example** | "How to write a Pest test" | "Never commit without tests" |
+| **File** | `.qwen/skills/<name>/SKILL.md` | `.qwen/rules/<name>.md` |
+| **Analogy** | A cookbook recipe | A building code regulation |
+
+**Use rules** for constraints that always apply (code style, git rules, testing requirements).
+**Use skills** for procedures that apply situationally (TDD workflow, deployment process, code review checklist).
+
+### How to Create a Skill
+
+Create a directory in `.qwen/skills/` with a `SKILL.md` file:
+
+```markdown
+# Skill Name
+
+Brief description of what this skill does.
+
+## When to Use
+- Trigger condition 1
+- Trigger condition 2
+
+## Instructions
+1. Step one
+2. Step two
+3. Step three
+
+## Examples
+...
+```
+
+### Installing Skills from skills.sh
+
+Browse and install community skills from [skills.sh](https://skills.sh):
+
+```bash
+npx skills add <owner/repo>
+```
+
+Skills from skills.sh work across multiple agents (Qwen Code, Claude Code, Gemini, Copilot, Cursor, Codex, and more).
 
 ## MCP Servers
 

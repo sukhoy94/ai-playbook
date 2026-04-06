@@ -17,6 +17,11 @@ This directory contains Claude-specific configuration and resources for AI workf
   - [Context Priority](#context-priority)
   - [Rules vs CLAUDE.md vs Skills](#rules-vs-claudemd-vs-skills)
   - [Best Practices](#rules-best-practices)
+- [Skills](#skills)
+  - [What Are Skills](#what-are-skills)
+  - [Skills vs Rules](#skills-vs-rules)
+  - [How to Create a Skill](#how-to-create-a-skill)
+  - [Installing Skills from skills.sh](#installing-skills-from-skillssh)
 - [Settings](#settings)
 - [Permissions](#permissions)
 - [Hooks](#hooks)
@@ -86,97 +91,75 @@ The filename is case-sensitive: must be exactly `CLAUDE.md`.
 - Periodically review and clean up outdated or redundant rules
 - Use emphasis (IMPORTANT, NEVER) sparingly for truly critical rules
 
-## Rules
+## Skills
 
-### What Is the Rules Directory
+### What Are Skills
 
-The `.claude/rules/` directory is a modular alternative to monolithic CLAUDE.md files. Instead of cramming everything into one file, you organize instructions into multiple markdown files.
-
-**Important:** All rules files are loaded into the context window alongside CLAUDE.md. They receive the **same high priority** as CLAUDE.md, meaning Claude treats them as authoritative instructions.
-
-Every `.md` file in `.claude/rules/` loads automatically — no configuration needed:
+Skills are reusable, documented capabilities stored in `.claude/skills/`. Each skill is a directory containing a `SKILL.md` file that teaches Claude how to perform a specific task or follow a particular methodology.
 
 ```
-.claude/rules/
-├── code-style.md      # Formatting and conventions
-├── testing.md         # Test requirements
-├── security.md        # Security checklist
-└── frontend/
-    ├── react.md       # React-specific patterns
-    └── styles.md      # CSS conventions
+.claude/skills/
+├── tdd-workflow/
+│   └── SKILL.md
+├── code-review/
+│   └── SKILL.md
+└── deployment/
+    └── SKILL.md
 ```
 
-Subdirectories are discovered recursively. Use them to keep related rules grouped.
+Skills are auto-invoked when Claude detects relevant context. Unlike rules (which are always loaded), skills activate on-demand based on their description and the current task.
 
-### Path-Specific Rules
+### Skills vs Rules
 
-You can target rules to specific file patterns using YAML frontmatter:
+| Aspect | Skills | Rules |
+|--------|--------|-------|
+| **Loading** | On-demand when triggered | Always loaded into context |
+| **Purpose** | Teach "how to do" something | Define "what must/must not" be done |
+| **Context cost** | Only when active | Every session |
+| **Granularity** | Procedural knowledge (step-by-step) | Declarative constraints (always true) |
+| **Example** | "How to write a Pest test" | "Never commit without tests" |
+| **File** | `.claude/skills/<name>/SKILL.md` | `.claude/rules/<name>.md` |
+| **Analogy** | A cookbook recipe | A building code regulation |
 
-```yaml
+**Use rules** for constraints that always apply (code style, git rules, testing requirements).
+**Use skills** for procedures that apply situationally (TDD workflow, deployment process, code review checklist).
+
+### How to Create a Skill
+
+Create a directory in `.claude/skills/` with a `SKILL.md` file:
+
+```markdown
 ---
-paths: src/api/**/*.ts
+name: skill-name
+description: "When to activate this skill. Include trigger words and examples."
 ---
 
-# API Development Rules
+# Skill Name
 
-- All endpoints must validate input with Zod
-- Return consistent error shapes: { error: string, code: number }
+Brief description of what this skill does.
+
+## When to Use
+- Trigger condition 1
+- Trigger condition 2
+
+## Instructions
+1. Step one
+2. Step two
+3. Step three
+
+## Examples
+...
 ```
 
-This rule **only activates when Claude works on files matching the pattern**. Your API guidelines stay out of the way when editing other files.
+### Installing Skills from skills.sh
 
-**Multiple path patterns:**
+Browse and install community skills from [skills.sh](https://skills.sh):
 
-```yaml
----
-paths:
-  - src/components/**/*.tsx
-  - src/hooks/**/*.ts
----
+```bash
+npx skills add <owner/repo>
 ```
 
-**Brace expansion** is supported:
-
-```yaml
----
-paths: "src/**/*.{ts,tsx}"
----
-```
-
-### Context Priority
-
-Claude's context window has a priority hierarchy — not all tokens are weighted equally:
-
-| Source | Priority | Loads When |
-|--------|----------|------------|
-| **CLAUDE.md** | High | Every session |
-| **Rules Directory** | High | Every session (filtered by path) |
-| **Skills** | Medium | On-demand when triggered |
-| **Conversation history** | Variable | Throughout session |
-| **File contents (Read tool)** | Standard | When read |
-
-**High priority everywhere = priority nowhere.** When everything is marked important, Claude struggles to determine what's relevant. Path-targeted rules solve this by scoping high-priority instructions to specific file types.
-
-### Rules vs CLAUDE.md vs Skills
-
-| Feature | Priority | Best For | Loads When |
-|---------|----------|----------|------------|
-| **CLAUDE.md** | High | Universal operational workflows | Every session |
-| **Rules** | High | Domain-specific instructions | Every session (filtered by path) |
-| **Skills** | Medium | Reusable cross-project expertise | On-demand when triggered |
-
-- **Use CLAUDE.md** for what applies everywhere: routing logic, quality standards, coordination protocols
-- **Use rules** for what applies to specific areas: API patterns for API files, test requirements for test files
-- **Use skills** for what applies across projects: deployment procedures, code review checklists, brand guidelines
-
-### Best Practices
-
-- **Keep rules focused** — One concern per file
-- **Use descriptive filenames** — `api-validation.md` beats `rules1.md`
-- **Leverage path targeting** — Rules without paths load everywhere; add paths to reduce noise
-- **Version control everything** — Rules are code; review changes, track history
-- **User-level rules** — Place personal defaults in `~/.claude/rules/` that apply across all projects
-- **Symlinks** — Share rules across projects by symlinking from a central repository
+Skills from skills.sh work across multiple agents (Claude Code, Gemini, Copilot, Cursor, Codex, and more).
 
 ## Settings
 
