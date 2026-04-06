@@ -17,6 +17,8 @@ A collection of AI workflow notes, configurations, and best practices for workin
 | [DeepSeek](https://chat.deepseek.com) — DeepSeek | Coding, math, reasoning — strong value for cost | Free tier + Pay-per-use API |
 | [Grok](https://grok.com) — xAI | Real-time X/Twitter data, uncensored responses | Free tier + Premium ($30/mo) |
 | [Copilot](https://copilot.microsoft.com) — Microsoft | Microsoft 365 integration, Office workflows, enterprise | Free tier + Pro ($20/mo) + Microsoft 365 |
+| [NotebookLM](https://notebooklm.google.com) — Google | Document-based research, study notes, podcast generation from sources | Free |
+| [Perplexity](https://perplexity.ai) — Perplexity AI | AI-powered search engine, real-time web research, sourced answers | Free tier + Pro ($20/mo) + Enterprise |
 
 ## Tools
 
