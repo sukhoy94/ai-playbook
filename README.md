@@ -24,3 +24,7 @@ A collection of AI workflow notes, configurations, and best practices for workin
 
 - [OpenCode](https://opencode.ai) — Open-source AI coding assistant CLI
 - [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code/overview) — Anthropic's AI coding agent CLI
+
+## Skills & Plugins
+
+- [skills.sh](https://skills.sh) — Open agent skills ecosystem by Vercel. Reusable, installable capabilities for any agent (Claude Code, Gemini, Copilot, Cursor, Codex, Goose, and more). Install with `npx skills add <owner/repo>`.
