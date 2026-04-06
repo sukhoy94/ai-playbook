@@ -7,14 +7,16 @@ A collection of AI workflow notes, configurations, and best practices for workin
 
 ## LLM Providers
 
-- [Claude](https://claude.ai) — Anthropic
-- [ChatGPT](https://chatgpt.com) — OpenAI
-- [Gemini](https://gemini.google.com) — Google
-- [Mistral](https://chat.mistral.ai) — Mistral AI
-- [Qwen](https://chat.qwen.ai) — Alibaba Cloud
-- [DeepSeek](https://chat.deepseek.com) — DeepSeek
-- [Grok](https://grok.com) — xAI
-- [Copilot](https://copilot.microsoft.com) — Microsoft
+| Provider | Best For | Pricing |
+|----------|----------|---------|
+| [Claude](https://claude.ai) — Anthropic | Deep reasoning, code analysis, long context, agentic workflows | Free tier + Pro ($20/mo) + Team/Enterprise |
+| [ChatGPT](https://chatgpt.com) — OpenAI | General purpose, creative writing, coding, data analysis | Free tier + Plus ($20/mo) + Team/Enterprise |
+| [Gemini](https://gemini.google.com) — Google | Google ecosystem integration, multimodal (images, video), large context | Free tier + Advanced ($20/mo) + Enterprise |
+| [Mistral](https://chat.mistral.ai) — Mistral AI | Open-weight models, European data sovereignty, self-hosting | Free tier + Pay-per-use API + Enterprise |
+| [Qwen](https://chat.qwen.ai) — Alibaba Cloud | Strong coding abilities, multilingual (especially CJK), open weights | Free tier + Pay-per-use API |
+| [DeepSeek](https://chat.deepseek.com) — DeepSeek | Coding, math, reasoning — strong value for cost | Free tier + Pay-per-use API |
+| [Grok](https://grok.com) — xAI | Real-time X/Twitter data, uncensored responses | Free tier + Premium ($30/mo) |
+| [Copilot](https://copilot.microsoft.com) — Microsoft | Microsoft 365 integration, Office workflows, enterprise | Free tier + Pro ($20/mo) + Microsoft 365 |
 
 ## Tools
 
