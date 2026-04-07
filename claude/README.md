@@ -2,34 +2,34 @@
 
 This directory contains Claude-specific configuration and resources for AI workflows.
 
-## Table of Contents
+## Context Window
 
-- [CLAUDE.md](#claudemd)
-  - [Why You Need It](#why-you-need-it)
-  - [What to Include](#what-to-include)
-  - [Auto-Generate with /init](#auto-generate-with-init)
-  - [File Locations](#file-locations)
-  - [Advanced Features](#advanced-features)
-  - [Best Practices](#best-practices)
-- [Rules](#rules)
-  - [What Is the Rules Directory](#what-is-the-rules-directory)
-  - [Path-Specific Rules](#path-specific-rules)
-  - [Context Priority](#context-priority)
-  - [Rules vs CLAUDE.md vs Skills](#rules-vs-claudemd-vs-skills)
-  - [Best Practices](#rules-best-practices)
-- [Skills](#skills)
-  - [What Are Skills](#what-are-skills)
-  - [Skills vs Rules](#skills-vs-rules)
-  - [How to Create a Skill](#how-to-create-a-skill)
-  - [Installing Skills from skills.sh](#installing-skills-from-skillssh)
-- [Settings](#settings)
-- [Permissions](#permissions)
-- [Hooks](#hooks)
-  - [Hook Handler Types](#hook-handler-types)
-  - [Exit Codes](#exit-codes)
-- [Structure](#structure)
-- [Agents](#agents)
-- [Plugins](#plugins)
+The **context window** is the total number of tokens Claude can "see" in a single conversation — everything loaded into its working memory at once. This includes:
+
+- Your prompts and Claude's responses
+- All conversation history
+- CLAUDE.md, rules, and active skills
+- File contents read via tools
+- System instructions
+
+**Important:** Every token in the context window counts toward the limit. Once you hit it, Claude can no longer see earlier parts of the conversation.
+
+### Claude Context Window Sizes
+
+| Model | Context Window | Output Max |
+|-------|---------------|------------|
+| Opus 4.6 | 1,000,000 tokens | 128,000 tokens |
+| Sonnet 4.6 | 1,000,000 tokens | 128,000 tokens |
+| Haiku 4.5 | 200,000 tokens | 64,000 tokens |
+
+1M context window ≈ ~750,000 words or ~10,000 pages of text.
+
+### Managing Context
+
+- **CLAUDE.md and rules** are loaded every session — keep them concise
+- **Skills** only load when triggered — cheaper than rules
+- **Auto-compaction** kicks in when context fills up (configurable via `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE`)
+- Use `CLAUDE_CODE_DISABLE_1M_CONTEXT: "1"` to force a smaller window for better performance
 
 ## CLAUDE.md
 
