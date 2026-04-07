@@ -2,24 +2,34 @@
 
 This directory contains Qwen Code-specific configuration and resources for AI workflows.
 
-## Table of Contents
+## Context Window
 
-- [QWEN.md](#qwenmd)
-  - [Why You Need It](#why-you-need-it)
-  - [What to Include](#what-to-include)
-  - [File Locations](#file-locations)
-  - [Best Practices](#best-practices)
-- [Settings](#settings)
-  - [Configuration Layers](#configuration-layers)
-  - [Key Settings](#key-settings)
-  - [Approval Modes](#approval-modes)
-  - [Environment Variables](#environment-variables)
-- [Tools & Permissions](#tools--permissions)
-- [Subagents](#subagents)
-- [Skills](#skills)
-- [MCP Servers](#mcp-servers)
-- [Structure](#structure)
-- [Agents](#agents)
+The **context window** is the total number of tokens Qwen can "see" in a single conversation — everything loaded into its working memory at once. This includes:
+
+- Your prompts and Qwen's responses
+- All conversation history
+- QWEN.md, rules, and active skills
+- File contents read via tools
+- System instructions
+
+**Important:** Every token in the context window counts toward the limit. Once you hit it, Qwen can no longer see earlier parts of the conversation.
+
+### Qwen Context Window Sizes
+
+| Model | Context Window | Output Max |
+|-------|---------------|------------|
+| Qwen3 Coder Plus | ~1,000,000 tokens (998K) | ~66,000 tokens |
+| Qwen3 Coder | ~1,000,000 tokens | ~262,000 tokens |
+| Qwen3 Max | ~1,000,000 tokens | ~66,000 tokens |
+| Qwen3 Coder Next | 32,000 tokens | 8,000 tokens |
+
+1M context window ≈ ~750,000 words or ~10,000 pages of text.
+
+### Managing Context
+
+- **QWEN.md and rules** are loaded every session — keep them concise
+- **Skills** only load when triggered — cheaper than rules
+- Use `context.fileFiltering` settings to control what files are read
 
 ## QWEN.md
 
