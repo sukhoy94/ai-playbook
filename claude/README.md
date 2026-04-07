@@ -332,6 +332,7 @@ These plugins are essential for our workflow:
 - **Simplify** — Reduces verbosity in Claude's responses, making output more concise and actionable.
 - **Superpowers** — Collection of advanced skills including brainstorming, plan-writing, and other specialized capabilities that agents can reference.
 - **Claude HUD** — Real-time statusline showing context usage, active tools, running agents, and todo progress directly in the terminal. 16.9K+ stars. Install: `/plugin marketplace add jarrodwatts/claude-hud && /plugin install claude-hud`, then `/claude-hud:setup`
+- **Caveman** — Makes Claude talk like caveman, cutting ~65% of output tokens while keeping full technical accuracy. 5.5K+ stars. Install: `npx skills add JuliusBrussee/caveman` or `/plugin marketplace add JuliusBrussee/caveman && /plugin install caveman`. Supports intensity levels: `/caveman lite`, `/caveman full`, `/caveman ultra`. Also includes `caveman-compress` for compressing CLAUDE.md files (~45% input token savings).
 
 ### Must-Have PHP/Laravel Plugins
 
