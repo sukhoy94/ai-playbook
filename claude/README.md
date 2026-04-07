@@ -2,6 +2,42 @@
 
 This directory contains Claude-specific configuration and resources for AI workflows.
 
+## Table of Contents
+
+- [Context Window](#context-window)
+  - [Claude Context Window Sizes](#claude-context-window-sizes)
+  - [Managing Context](#managing-context)
+- [CLAUDE.md](#claudemd)
+  - [Why You Need It](#why-you-need-it)
+  - [What to Include](#what-to-include)
+  - [Auto-Generate with /init](#auto-generate-with-init)
+  - [File Locations](#file-locations)
+  - [Advanced Features](#advanced-features)
+  - [Best Practices](#best-practices)
+- [Skills](#skills)
+  - [What Are Skills](#what-are-skills)
+  - [Skills vs Rules](#skills-vs-rules)
+  - [How to Create a Skill](#how-to-create-a-skill)
+  - [Installing Skills from skills.sh](#installing-skills-from-skillssh)
+- [Settings](#settings)
+  - [Environment Variables](#environment-variables)
+- [Permissions](#permissions)
+- [Hooks](#hooks)
+  - [Hook Handler Types](#hook-handler-types)
+  - [Exit Codes](#exit-codes)
+- [Structure](#structure)
+- [Agents](#agents)
+- [Plugins](#plugins)
+  - [Why Plugins](#why-plugins)
+  - [Plugin Architecture](#plugin-architecture)
+  - [Installation](#installation)
+  - [Popular Plugins](#popular-plugins)
+  - [Must-Have Plugins](#must-have-plugins)
+  - [Must-Have PHP/Laravel Plugins](#must-have-phplaravel-plugins)
+  - [MCP Tool Search](#mcp-tool-search)
+  - [Security Considerations](#security-considerations)
+  - [Plugins vs Skills vs MCP vs Hooks](#plugins-vs-skills-vs-mcp-vs-hooks)
+
 ## Context Window
 
 The **context window** is the total number of tokens Claude can "see" in a single conversation — everything loaded into its working memory at once. This includes:
