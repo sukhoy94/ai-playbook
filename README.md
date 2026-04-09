@@ -4,6 +4,7 @@ A collection of AI workflow notes, configurations, and best practices for workin
 
 - [Claude](claude/README.md)
 - [Qwen](qwen/README.md)
+- [Cursor](cursor/README.md)
 
 ## LLM Providers
 

@@ -1,0 +1,49 @@
+---
+description: Core project standards that apply to all code
+alwaysApply: true
+---
+
+# Project: AI Workflow Playbook
+
+## Tech Stack
+
+- PHP 8.3+ with Laravel / Pure PHP
+- TypeScript 5.x
+- React 18.x
+- MySQL
+
+## Core Conventions
+
+- Use strict typing in PHP: `declare(strict_types=1)`
+- All class properties must be typed
+- Return types required on all methods
+- Use `===` for comparisons (strict equality)
+- PSR-12 code formatting
+
+## Architecture
+
+- **Actions/** — Single-responsibility business logic
+- **Models/** — ORM models, no business logic
+- **Services/** — Cross-cutting concerns only
+- **Dtos/** — Data transfer objects (PHP 8.x record types)
+
+## Code Quality
+
+- PHPStan (Level 7+) for static analysis
+- Pint for code formatting
+- Pest/PHPUnit for testing
+- Never commit without running tests
+
+## Git Workflow
+
+- NEVER create commits automatically
+- NEVER push without explicit user request
+- Use descriptive branch names: `feature/ticket-description`
+- PR description: no AI mentions, no stats
+
+## Security
+
+- Never expose secrets in code
+- Use environment variables for sensitive data
+- Validate all inputs
+- Use parameterized queries (no SQL injection)

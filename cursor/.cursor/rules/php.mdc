@@ -1,0 +1,66 @@
+---
+description: PHP and Laravel programming standards
+globs: ["**/*.php"]
+alwaysApply: false
+---
+
+# PHP / Laravel Standards
+
+## Strict PHP
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Actions;
+
+use App\Models\User;
+
+class CreateUserAction
+{
+    public function handle(CreateUserRequest $request): User
+    {
+        // Implementation
+    }
+}
+```
+
+## Class Organization
+
+1. Constants
+2. Properties
+3. Constructor
+4. Public methods
+5. Protected methods
+6. Private methods
+
+## Naming
+
+- Classes: PascalCase (`UserService`)
+- Methods: camelCase (`handlePayment`)
+- Variables: camelCase (`$userList`)
+- Constants: UPPER_SNAKE_CASE
+- Interfaces: `Cacheable`, `RepositoryInterface`
+
+## Laravel Patterns
+
+- **Actions** — Business logic with single `handle()` method
+- **Requests** — Form request classes for validation
+- **Resources** — API resource transformers
+- **Policies** — Authorization logic
+
+## Testing
+
+```php
+<?php
+
+describe('CreateUserAction', function (): void {
+    it('creates a user', function (): void {
+        $action = new CreateUserAction();
+        $user = $action->handle($request);
+
+        expect($user)->toBeInstanceOf(User::class);
+    });
+});
+```
