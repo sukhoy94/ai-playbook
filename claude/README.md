@@ -18,6 +18,23 @@ This directory contains Claude-specific configuration and resources for AI workf
 
 Claude Code is designed for *software development workflows*: writing code, debugging, code review, refactoring, running tests, and deploying applications. It integrates deeply with your project through configuration files and tools.
 
+### What Does "Agentic" Mean?
+
+**Agentic** means the AI can *act* autonomously — not just respond to prompts, but take initiative to accomplish goals.
+
+| Non-Agentic (Chat) | Agentic (Claude Code) |
+|-------------------|----------------------|
+| You ask → AI answers | You give goal → AI does it |
+| Passive responses | Proactive execution |
+| One-way conversation | Multi-step task completion |
+| Just talks | Reads files, runs commands, edits code |
+
+**Example:**
+- *Chat:* "How do I fix this bug?" → AI explains
+- *Agentic:* "Fix this bug" → AI finds it, edits files, runs tests, commits
+
+Agentic AI uses *tools* to interact with the world — file system, git, terminal, APIs — to complete tasks end-to-end, not just provide advice.
+
 ## Table of Contents
 
 - [Context Window](#context-window)
