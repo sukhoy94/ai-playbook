@@ -2,6 +2,22 @@
 
 This directory contains Claude-specific configuration and resources for AI workflows.
 
+## What Is Claude Code?
+
+**Conceptually:** Claude Code is an *agentic CLI* — an AI-powered developer tool that lives in your terminal. It's not just a chatbot that answers questions; it's an autonomous coding assistant that can execute tasks, manage files, run commands, and work independently to accomplish development goals.
+
+**What it does:**
+- Reads and edits files in your codebase
+- Executes shell commands (git, npm, docker, etc.)
+- Spawns subagents for parallel or specialized tasks
+- Uses tools (Read, Edit, Write, Bash, Grep, etc.) to interact with your project
+
+**Key distinction from Chat:**
+- **Chat (claude.ai)** — Conversational AI for questions, brainstorming, general assistance
+- **Claude Code** — Agentic coding tool that acts on your codebase, runs commands, automates tasks
+
+Claude Code is designed for *software development workflows*: writing code, debugging, code review, refactoring, running tests, and deploying applications. It integrates deeply with your project through configuration files and tools.
+
 ## Table of Contents
 
 - [Context Window](#context-window)
