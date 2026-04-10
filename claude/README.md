@@ -35,6 +35,38 @@ Claude Code is designed for *software development workflows*: writing code, debu
 
 Agentic AI uses *tools* to interact with the world — file system, git, terminal, APIs — to complete tasks end-to-end, not just provide advice.
 
+### How It Works Under the Hood
+
+Under the hood, Claude Code is a **Node.js CLI application** that works like this:
+
+```
+┌─────────────────────────────────────────────┐
+│           Claude Code (Node.js)             │
+├─────────────────────────────────────────────┤
+│  1. User Input → Parser                     │
+│  2. Build prompt (CLAUDE.md + history)      │
+│  3. HTTP → Anthropic API (Claude model)     │
+│  4. Response ← Parse tool_calls             │
+│  5. Execute tools (Read/Edit/Bash/...)       │
+│  6. Tool results → back to model            │
+│  7. Display response to user                 │
+└─────────────────────────────────────────────┘
+```
+
+**Core components:**
+
+| Component | What it does |
+|-----------|---------------|
+| **CLI Interface** | Parses commands, provides interactive terminal |
+| **Prompt Builder** | Builds context from CLAUDE.md, rules, history |
+| **API Client** | HTTP calls to Anthropic's Claude API |
+| **Tool Executor** | Runs tool_calls returned by the model |
+| **State Manager** | Manages session, context window, compaction |
+
+**In simple terms:** Claude Code sends your prompt to Anthropic's API → gets response with instructions ("read this file", "edit that line") → executes those actions locally → sends results back to the model → repeats until done.
+
+The model decides *when* to use tools — this is "tool use" built into the model.
+
 ## Table of Contents
 
 - [Context Window](#context-window)
